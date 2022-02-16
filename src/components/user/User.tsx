@@ -2,10 +2,12 @@ import React, { useState } from "react";
 
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { giveAnswer, selectAnswer } from "./userSlice";
+import { selectQuestion } from "../admin/adminSlice";
 import styles from "./User.module.css";
 
 export function User() {
   const answer = useAppSelector(selectAnswer);
+  const question = useAppSelector(selectQuestion);
   const dispatch = useAppDispatch();
   const [userAnswer, setUserAnswer] = useState("");
 
@@ -13,7 +15,11 @@ export function User() {
     <div>
       <div className={styles.row}>
         <p>
-          <strong>Question</strong>
+          <strong>
+            {question!.length > 0
+              ? question![question!.length - 1]
+              : "No questions available"}
+          </strong>
         </p>
       </div>
 
