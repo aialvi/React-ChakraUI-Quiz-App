@@ -2,7 +2,7 @@ import React from "react";
 import { User } from "./components/user/User";
 import { Admin } from "./components/admin/Admin";
 import { NotFound } from "./components/misc/404";
-import { Home } from "./components/navbar/Home";
+import { Home } from "./components/home/Home";
 import { Login } from "./components/auth/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
