@@ -7,6 +7,7 @@ import { Login } from "./components/auth/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import "./App.css";
+import { QuestionList } from "./components/user/QuestionList";
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/user" element={<User />} />
+              <Route path="/user" element={<QuestionList />} />
+              <Route path="/user/question/:id" element={<User />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

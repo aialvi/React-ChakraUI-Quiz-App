@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
-import { giveAnswer, selectAnswer } from "./userSlice";
+import { giveAnswer, selectAnswer, selectedQuestionId } from "./userSlice";
 import { selectQuestion } from "../admin/adminSlice";
 import styles from "./User.module.css";
+import { Button } from "@chakra-ui/react";
 
 export function User() {
   const answer = useAppSelector(selectAnswer);
   const question = useAppSelector(selectQuestion);
+  const questionId = useAppSelector(selectedQuestionId);
   const dispatch = useAppDispatch();
   const [userAnswer, setUserAnswer] = useState("");
 
@@ -17,7 +18,7 @@ export function User() {
         <p>
           <strong>
             {question!.length > 0
-              ? question![question!.length - 1]
+              ? question![questionId]
               : "No questions available"}
           </strong>
         </p>
@@ -39,15 +40,15 @@ export function User() {
         />
       </div>
       <div className={styles.row}>
-        <button
-          className={styles.button}
+        <Button
           onClick={() => {
             dispatch(giveAnswer(userAnswer));
             setUserAnswer("");
           }}
+          disabled={userAnswer.length === 0}
         >
           Submit
-        </button>
+        </Button>
       </div>
 
       <div className={styles.row}>
@@ -55,7 +56,7 @@ export function User() {
           {!!answer.length && <h6>Answer:</h6>}
           <ul>
             {answer.map((item, index) => (
-              <li key={index}>{item}</li>
+              <li key={index}>{item.answer}</li>
             ))}
           </ul>
         </span>

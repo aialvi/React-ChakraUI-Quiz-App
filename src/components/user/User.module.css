@@ -29,7 +29,7 @@
   padding-right: 12px;
   outline: none;
   border: 2px solid transparent;
-  color: rgb(112, 106, 182);
+  color: rgb(112, 106, 192);
   padding-bottom: 4px;
   cursor: pointer;
   background-color: rgba(52, 76, 12, 0.1);
@@ -43,6 +43,7 @@
   width: 350px;
   text-align: center;
   margin-right: 4px;
+  border: 1px solid rgb(112, 106, 192);
 }
 
 .button:hover,
