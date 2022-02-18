@@ -3,6 +3,7 @@ import { assignQuestionId } from "./userSlice";
 import { allQuestions } from "../admin/adminSlice";
 import { useNavigate } from "react-router-dom";
 import styles from "./User.module.css";
+import { List, ListItem, Text } from "@chakra-ui/react";
 
 export function QuestionList() {
   const navigate = useNavigate();
@@ -12,11 +13,13 @@ export function QuestionList() {
   return (
     <div>
       <div className={styles.row}>
-        <span className={styles.answer}>
-          {!!question!.length && <h6>Available Questions:</h6>}
-          <ul>
+        <Text>
+          {!!question!.length && (
+            <Text fontSize={"xl"}>Available Questions To Answer:</Text>
+          )}
+          <List spacing={3}>
             {question!.map((item, index) => (
-              <li
+              <ListItem
                 key={index}
                 onClick={() => {
                   dispatch(assignQuestionId(index));
@@ -24,10 +27,10 @@ export function QuestionList() {
                 }}
               >
                 {item}
-              </li>
+              </ListItem>
             ))}
-          </ul>
-        </span>
+          </List>
+        </Text>
       </div>
     </div>
   );
