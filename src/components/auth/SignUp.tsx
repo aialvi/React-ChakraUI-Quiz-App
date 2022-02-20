@@ -16,7 +16,7 @@ import axios from "axios";
 
 export function SignUp() {
   //function for SignUp with api request
-  const [username, setUsername] = useState("eve.holt@reqres.in");
+  const [email, setEmail] = useState("eve.holt@reqres.in");
   const [password, setPassword] = useState("cityslicka");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,7 @@ export function SignUp() {
 
     axios
       .post("https://reqres.in/api/Signup", {
-        email: username,
+        email: email,
         password: password,
       })
       .then((response: any) => {
@@ -85,8 +85,8 @@ export function SignUp() {
                   <Input
                     type="email"
                     placeholder="email address"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </InputGroup>
               </FormControl>
@@ -114,7 +114,7 @@ export function SignUp() {
                 colorScheme="blue"
                 width="full"
                 onClick={onSignUp}
-                disabled={loading || !username || !password}
+                disabled={loading || !email || !password}
               >
                 Sign Up
               </Button>

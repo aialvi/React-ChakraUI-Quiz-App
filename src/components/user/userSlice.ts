@@ -7,6 +7,13 @@ export interface AnswerState {
   status: "idle" | "loading" | "failed";
 }
 
+export interface Answer {
+  id: number;
+  answer: string;
+  userId: number;
+  questionId: number;
+}
+
 const initialState: AnswerState = {
   value: !!localStorage.getItem("answers")
     ? JSON.parse(localStorage.getItem("answers")!)
@@ -35,11 +42,26 @@ export const AnswerSlice = createSlice({
     assignQuestionId: (state, action: PayloadAction<number>) => {
       state.selectedQuestionId = action.payload;
     },
+    updateAnswer: (state, action: PayloadAction<Answer>) => {
+      const index = state.value.findIndex(
+        (answer) => answer.id === action.payload.id
+      );
+      state.value[index] = action.payload;
+      localStorage.setItem("answers", JSON.stringify(state.value));
+    },
+    deleteAnswer: (state, action: PayloadAction<number>) => {
+      state.value = state.value.filter(
+        (answer) => answer.id !== action.payload
+      );
+      localStorage.setItem("answers", JSON.stringify(state.value));
+    },
   },
 });
 
 export const { giveAnswer } = AnswerSlice.actions;
 export const { assignQuestionId } = AnswerSlice.actions;
+export const { updateAnswer } = AnswerSlice.actions;
+export const { deleteAnswer } = AnswerSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

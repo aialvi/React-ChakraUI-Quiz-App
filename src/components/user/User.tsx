@@ -4,6 +4,7 @@ import { giveAnswer, selectAnswer, selectedQuestionId } from "./userSlice";
 import { selectQuestion } from "../admin/adminSlice";
 import styles from "./User.module.css";
 import { Button } from "@chakra-ui/react";
+import Answer from "./answer/Answer";
 
 export function User() {
   const answer = useAppSelector(selectAnswer);
@@ -54,11 +55,16 @@ export function User() {
       <div className={styles.row}>
         <span className={styles.answer}>
           {!!answer.length && <h6>Answer:</h6>}
-          <ul>
-            {answer.map((item, index) => (
-              <li key={index}>{item.answer}</li>
-            ))}
-          </ul>
+
+          {answer.map((item, index) => (
+            <Answer
+              key={index}
+              answer={item.answer}
+              id={item.id}
+              userId={item.userId}
+              questionId={item.questionId}
+            />
+          ))}
         </span>
       </div>
     </div>
