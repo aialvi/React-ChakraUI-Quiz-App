@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
-import { addQuestion, selectQuestion } from "./adminSlice";
+import { addQuestion, allQuestions, Question } from "./adminSlice";
 import styles from "./Admin.module.css";
+import QuestionItem from "./question/Question";
+import { Button, Input } from "@chakra-ui/react";
 
 export function Admin() {
-  const questions = useAppSelector(selectQuestion);
+  const questions = useAppSelector(allQuestions);
   const dispatch = useAppDispatch();
   const [question, setQuestion] = useState("");
 
@@ -13,17 +14,18 @@ export function Admin() {
     <div>
       <div className={styles.row}>
         <p>
-          <strong>Questions</strong>
+          <strong>Add Question</strong>
         </p>
       </div>
 
       <div className={styles.row}>
-        <input
+        <Input
           className={styles.textbox}
           aria-label="type question here"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="type question here"
+          size="md"
           onKeyUp={(e) => {
             if (e.key === "Enter") {
               dispatch(addQuestion(question));
@@ -31,28 +33,28 @@ export function Admin() {
             }
           }}
         />
-      </div>
-      <div className={styles.row}>
-        <button
-          className={styles.button}
+        <Button
+          color={"green.500"}
           onClick={() => {
             dispatch(addQuestion(question));
             setQuestion("");
           }}
           disabled={!question.length}
         >
-          Submit
-        </button>
+          Add
+        </Button>
+      </div>
+      <div className={styles.row}></div>
+
+      <div className={styles.row}>
+        {!!questions!.length && <h6>List of Questions:</h6>}
       </div>
 
       <div className={styles.row}>
         <span className={styles.question}>
-          {!!questions!.length && <h6>Questions:</h6>}
-          <ul>
-            {questions!.map((item: string, index: number) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+          {questions!.map((item: Question) => (
+            <QuestionItem key={item.id} id={item.id} question={item.question} />
+          ))}
         </span>
       </div>
     </div>

@@ -4,7 +4,6 @@ import { RootState } from "../../app/store";
 export interface AnswerState {
   value: Array<any>;
   selectedQuestionId: number;
-  status: "idle" | "loading" | "failed";
 }
 
 export interface Answer {
@@ -18,7 +17,6 @@ const initialState: AnswerState = {
   value: !!localStorage.getItem("answers")
     ? JSON.parse(localStorage.getItem("answers")!)
     : [],
-  status: "idle",
   selectedQuestionId: 0,
 };
 
