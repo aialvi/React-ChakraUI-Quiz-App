@@ -19,7 +19,7 @@ export function User() {
         <p>
           <strong>
             {questions!.length > 0
-              ? questions![questionId].question
+              ? questions.filter((item) => item.id === questionId)[0].question
               : "No questions available"}
           </strong>
         </p>
@@ -48,6 +48,7 @@ export function User() {
                 setUserAnswer("");
               }}
               disabled={userAnswer.length === 0}
+              color="green.500"
             >
               Submit
             </Button>

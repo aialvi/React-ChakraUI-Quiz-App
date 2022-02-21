@@ -22,6 +22,8 @@ export function QuestionList() {
         {!!question!.length && (
           <Text fontSize={"xl"}>Available Questions To Answer:</Text>
         )}
+      </div>
+      <div className={styles.row}>
         <List spacing={3}>
           {question!.map((item) => (
             <ListItem

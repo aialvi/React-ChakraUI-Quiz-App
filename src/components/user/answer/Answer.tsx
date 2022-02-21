@@ -22,7 +22,7 @@ const AnswerItem = ({ userId, questionId, id, answer }: Answer) => {
     <div className="d-flex justify-content-between">
       <HStack spacing="24px">
         {!isUpdate && (
-          <Box w="160px" bg="gray.100">
+          <Box w={"fit-content"} p={2}>
             {answer}
           </Box>
         )}
@@ -33,6 +33,11 @@ const AnswerItem = ({ userId, questionId, id, answer }: Answer) => {
               onChange={(e) => setAnswerValue(e.target.value)}
               placeholder="Answer"
               size="md"
+              onKeyUp={(e) => {
+                if (e.key === "Enter") {
+                  handleAnswerInput();
+                }
+              }}
             />
             <Button onClick={handleAnswerInput} color="green.600">
               Save
@@ -43,13 +48,17 @@ const AnswerItem = ({ userId, questionId, id, answer }: Answer) => {
           <Button
             onClick={() => setIsUpdate(true)}
             color="blue.600"
-            className="btn btn-danger rounded-btn"
+            backgroundColor={"white"}
           >
             <AiOutlineEdit />
           </Button>
         </Box>
         <Box w="40px">
-          <Button color="red.600" onClick={handleDeleteClick}>
+          <Button
+            color="red.600"
+            onClick={handleDeleteClick}
+            backgroundColor={"white"}
+          >
             <AiOutlineDelete />
           </Button>
         </Box>
