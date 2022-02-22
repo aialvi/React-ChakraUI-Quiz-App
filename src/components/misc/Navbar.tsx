@@ -32,6 +32,7 @@ export default function NavBar() {
       onClick={() => {
         localStorage.removeItem("token");
         localStorage.removeItem("isAdmin");
+        localStorage.removeItem("currentUserId");
         navigate("/");
       }}
     >
@@ -58,9 +59,9 @@ export default function NavBar() {
               fontSize={"sm"}
               fontWeight={600}
               variant={"link"}
-              color={"green.400"}
+              color={"green.500"}
               _hover={{
-                color: "gray.500",
+                color: "green.600",
               }}
             >
               Quizzard

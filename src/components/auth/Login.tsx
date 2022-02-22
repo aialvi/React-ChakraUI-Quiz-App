@@ -14,6 +14,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { assignCurrentUserId } from "../user/userSlice";
+import { useAppDispatch } from "../../app/hooks";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -22,15 +24,29 @@ export function Login() {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = async () => {
     setLoading(true);
     if (
       JSON.parse(localStorage.getItem("users") || "[]").find(
-        (user: any) => user.isAdmin === true
+        (user: any) =>
+          user.isAdmin === true &&
+          user.email === email &&
+          user.password === password
       )
     ) {
       localStorage.setItem("isAdmin", "1");
+      localStorage.setItem(
+        "currentUserId",
+        JSON.parse(localStorage.getItem("users") || "[]")
+          .find((user: any) => user.email === email)
+          .id.toString()
+      );
+      dispatch(
+        assignCurrentUserId(Number(localStorage.getItem("currentUserId") || 0))
+      );
+      localStorage.setItem("token", Math.random().toString(36));
       navigate("/admin");
     } else if (
       JSON.parse(localStorage.getItem("users") || "[]").find(
@@ -39,6 +55,15 @@ export function Login() {
     ) {
       localStorage.setItem("token", Math.random().toString(36));
       setToken(localStorage.getItem("token"));
+      localStorage.setItem(
+        "currentUserId",
+        JSON.parse(localStorage.getItem("users") || "[]")
+          .find((user: any) => user.email === email)
+          .id.toString()
+      );
+      dispatch(
+        assignCurrentUserId(Number(localStorage.getItem("currentUserId") || 0))
+      );
       setError("");
       setLoading(false);
       navigate("/user");
@@ -89,7 +114,7 @@ export function Login() {
                   <InputLeftElement pointerEvents="none" />
                   <Input
                     type="email"
-                    placeholder="email address"
+                    placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />

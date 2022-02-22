@@ -52,7 +52,7 @@ export function Home() {
                 Already have an account?{" "}
                 <Link to={"/login"}>
                   {" "}
-                  <Button variant={"link"} colorScheme={"blue"} size={"sm"}>
+                  <Button variant={"link"} colorScheme={"green"} size={"sm"}>
                     Sign in
                   </Button>
                 </Link>

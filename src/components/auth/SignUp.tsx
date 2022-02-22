@@ -14,6 +14,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { assignCurrentUserId } from "../user/userSlice";
+import { useAppDispatch } from "../../app/hooks";
 
 export function SignUp() {
   //function for SignUp with api request
@@ -23,6 +25,7 @@ export function SignUp() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -45,6 +48,8 @@ export function SignUp() {
         users.push({ id: users.length + 1, name, email, password });
         localStorage.setItem("users", JSON.stringify(users));
         localStorage.setItem("token", Math.random().toString(36));
+        localStorage.setItem("currentUserId", users.length.toString());
+        dispatch(assignCurrentUserId(users.length));
         setLoading(false);
         navigate("/user");
       }
@@ -63,6 +68,8 @@ export function SignUp() {
       );
       localStorage.setItem("isAdmin", "1");
       localStorage.setItem("token", Math.random().toString(36));
+      localStorage.setItem("currentUserId", "1");
+      dispatch(assignCurrentUserId(1));
 
       setLoading(false);
       navigate("/user");

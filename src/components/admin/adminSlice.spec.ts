@@ -1,9 +1,10 @@
-import QuestionReducer, { QuestionState, addQuestion } from "./adminSlice";
+import QuestionReducer, { AdminStates, addQuestion } from "./adminSlice";
 
 describe("Answer reducer", () => {
-  const initialState: QuestionState = {
+  const initialState: AdminStates = {
     value: [],
     selectedQuestionId: 0,
+    userList: [],
   };
   it("should handle initial state", () => {
     expect(QuestionReducer(undefined, { type: "unknown" })).toEqual({

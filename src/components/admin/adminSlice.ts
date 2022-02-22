@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 
-export interface QuestionState {
+export interface AdminStates {
   value: Array<any>;
   selectedQuestionId: number;
+  userList: Array<any>;
 }
 
 export interface Question {
@@ -11,11 +12,12 @@ export interface Question {
   question: string;
 }
 
-const initialState: QuestionState = {
+const initialState: AdminStates = {
   value: !!localStorage.getItem("questions")
     ? JSON.parse(localStorage.getItem("questions")!)
     : [],
   selectedQuestionId: 0,
+  userList: JSON.parse(localStorage.getItem("users")!) || [],
 };
 
 export const QuestionSlice = createSlice({
@@ -59,6 +61,7 @@ export const { addQuestion, updateQuestion, deleteQuestion, assignQuestionId } =
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.Answer.value)`
 export const allQuestions = (state: RootState) => state.admin.value;
+export const allUsers = (state: RootState) => state.admin.userList;
 export const selectedQuestionId = (state: RootState) =>
   state.admin.selectedQuestionId;
 

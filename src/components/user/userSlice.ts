@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 
-export interface AnswerState {
-  value: Array<any>;
+export interface UserStates {
+  answers: Array<any>;
   selectedQuestionId: number;
+  currentUserId: number;
 }
 
 export interface Answer {
@@ -13,11 +14,14 @@ export interface Answer {
   questionId: number;
 }
 
-const initialState: AnswerState = {
-  value: !!localStorage.getItem("answers")
+const initialState: UserStates = {
+  answers: !!localStorage.getItem("answers")
     ? JSON.parse(localStorage.getItem("answers")!)
     : [],
   selectedQuestionId: 0,
+  currentUserId: !!localStorage.getItem("currentUserId")
+    ? Number(localStorage.getItem("currentUserId")!)
+    : 0,
 };
 
 export const AnswerSlice = createSlice({
@@ -28,45 +32,53 @@ export const AnswerSlice = createSlice({
     // Use the PayloadAction type to declare the contents of `action.payload`
     giveAnswer: (state, action: PayloadAction<string>) => {
       let tempObject = {
-        id: state.value.length + 1,
+        id: state.answers.length + 1,
         answer: action.payload,
-        userId: 1,
+        userId: state.currentUserId,
         questionId: state.selectedQuestionId,
       };
-      state.value = [...state.value, tempObject];
+      state.answers = [...state.answers, tempObject];
 
-      localStorage.setItem("answers", JSON.stringify(state.value));
+      localStorage.setItem("answers", JSON.stringify(state.answers));
     },
     assignQuestionId: (state, action: PayloadAction<number>) => {
       state.selectedQuestionId = action.payload;
     },
+    assignCurrentUserId: (state, action: PayloadAction<number>) => {
+      state.currentUserId = action.payload;
+    },
     updateAnswer: (state, action: PayloadAction<Answer>) => {
-      const index = state.value.findIndex(
+      const index = state.answers.findIndex(
         (answer) => answer.id === action.payload.id
       );
-      state.value[index] = action.payload;
-      localStorage.setItem("answers", JSON.stringify(state.value));
+      state.answers[index] = action.payload;
+      localStorage.setItem("answers", JSON.stringify(state.answers));
     },
     deleteAnswer: (state, action: PayloadAction<number>) => {
-      state.value = state.value.filter(
+      state.answers = state.answers.filter(
         (answer) => answer.id !== action.payload
       );
-      localStorage.setItem("answers", JSON.stringify(state.value));
+      localStorage.setItem("answers", JSON.stringify(state.answers));
     },
   },
 });
 
-export const { giveAnswer } = AnswerSlice.actions;
-export const { assignQuestionId } = AnswerSlice.actions;
-export const { updateAnswer } = AnswerSlice.actions;
-export const { deleteAnswer } = AnswerSlice.actions;
+export const {
+  giveAnswer,
+  assignQuestionId,
+  updateAnswer,
+  deleteAnswer,
+  assignCurrentUserId,
+} = AnswerSlice.actions;
 
-// The function below is called a selector and allows us to select a value from
+// The function below is called a selector and allows us to select a answers from
 // the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state: RootState) => state.Answer.value)`
-export const selectAnswer = (state: RootState) =>
-  state.user.value.filter(
-    (answer) => answer.questionId === state.user.selectedQuestionId
+// in the slice file. For example: `useSelector((state: RootState) => state.user.answers)`
+export const selectedAnswers = (state: RootState) =>
+  state.user.answers.filter(
+    (answer) =>
+      answer.questionId === state.user.selectedQuestionId &&
+      answer.userId === Number(state.user.currentUserId)
   );
 export const selectedQuestionId = (state: RootState) =>
   state.user.selectedQuestionId;

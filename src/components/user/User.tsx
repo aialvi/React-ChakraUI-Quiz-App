@@ -1,29 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
-import { giveAnswer, selectAnswer, selectedQuestionId } from "./userSlice";
+import { giveAnswer, selectedAnswers, selectedQuestionId } from "./userSlice";
 import { allQuestions } from "../admin/adminSlice";
 import styles from "./User.module.css";
-import { Button, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Input, Text } from "@chakra-ui/react";
 import Answer from "./answer/Answer";
 import { useNavigate } from "react-router-dom";
+import { GoBackButton } from "../misc/GoBackButton";
 
 export function User() {
-  const answer = useAppSelector(selectAnswer);
+  const answer = useAppSelector(selectedAnswers);
   const questions = useAppSelector(allQuestions);
   const questionId = useAppSelector(selectedQuestionId);
   const dispatch = useAppDispatch();
   const [userAnswer, setUserAnswer] = useState("");
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      navigate("/login");
+    if (!token || !questionId) {
+      navigate("/user");
     }
-  }, [navigate]);
+  }, [navigate, token, questionId]);
 
   return (
-    <div>
-      <div className={styles.row}>
+    <Box>
+      <Box className={styles.row}>
         <p>
           <strong>
             {questions!.length > 0
@@ -31,10 +33,10 @@ export function User() {
               : "No questions available"}
           </strong>
         </p>
-      </div>
+      </Box>
       {questions!.length > 0 && (
         <>
-          <div className={styles.row}>
+          <Box className={styles.row}>
             <Input
               className={styles.textbox}
               aria-label="Type answer here"
@@ -48,8 +50,8 @@ export function User() {
                 }
               }}
             />
-          </div>
-          <div className={styles.row}>
+          </Box>
+          <Box className={styles.row}>
             <Button
               onClick={() => {
                 dispatch(giveAnswer(userAnswer));
@@ -60,9 +62,9 @@ export function User() {
             >
               Submit
             </Button>
-          </div>
+          </Box>
 
-          <div className={styles.row}>
+          <Box className={styles.row}>
             <Text fontSize={"md"}>
               {!!answer.length && <h6>My Answers:</h6>}
 
@@ -76,9 +78,12 @@ export function User() {
                 />
               ))}
             </Text>
-          </div>
+          </Box>
+          <Box padding={10}>
+            <GoBackButton />
+          </Box>
         </>
       )}
-    </div>
+    </Box>
   );
 }

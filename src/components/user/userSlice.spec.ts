@@ -1,19 +1,21 @@
-import AnswerReducer, { AnswerState, giveAnswer } from "./userSlice";
+import UserReducer, { UserStates, giveAnswer } from "./userSlice";
 
 describe("Answer reducer", () => {
-  const initialState: AnswerState = {
-    value: [],
+  const initialState: UserStates = {
+    answers: [],
     selectedQuestionId: 0,
+    currentUserId: 1,
   };
   it("should handle initial state", () => {
-    expect(AnswerReducer(undefined, { type: "unknown" })).toEqual({
-      value: [],
+    expect(UserReducer(undefined, { type: "unknown" })).toEqual({
+      answers: [],
       selectedQuestionId: 0,
+      currentUserId: 1,
     });
   });
 
   it("should handle answer by user", () => {
-    const actual = AnswerReducer(initialState, giveAnswer("test"));
-    expect(actual.value).toEqual(["test"]);
+    const actual = UserReducer(initialState, giveAnswer("test"));
+    expect(actual.answers).toEqual(["test"]);
   });
 });
