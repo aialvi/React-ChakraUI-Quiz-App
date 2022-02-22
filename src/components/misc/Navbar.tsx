@@ -52,7 +52,7 @@ export default function NavBar() {
         borderColor={useColorModeValue("gray.200", "gray.900")}
         align={"center"}
       >
-        <Flex flex={{ base: 200 }} justify={{ base: "center", md: "start" }}>
+        <Flex flex={{ base: 6 }} justify={{ base: "start", md: "start" }}>
           <Link to={"/"}>
             <Button
               display={{ base: "inline-flex", md: "inline-flex" }}
@@ -63,6 +63,7 @@ export default function NavBar() {
               _hover={{
                 color: "green.600",
               }}
+              px={{ base: 4, md: 2 }}
             >
               Quizzard
             </Button>
