@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { addQuestion, allQuestions, Question } from "./adminSlice";
 import styles from "./Admin.module.css";
 import QuestionItem from "./question/Question";
 import { Button, Input } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 export function Admin() {
   const questions = useAppSelector(allQuestions);
   const dispatch = useAppDispatch();
   const [question, setQuestion] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("adminToken")) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   return (
     <div>
@@ -26,6 +34,7 @@ export function Admin() {
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="type question here"
           size="md"
+          width={400}
           onKeyUp={(e) => {
             if (e.key === "Enter") {
               dispatch(addQuestion(question));

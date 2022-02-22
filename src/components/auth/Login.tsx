@@ -12,46 +12,45 @@ import {
   FormControl,
   InputRightElement,
 } from "@chakra-ui/react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
-  //function for login with api request
-  const [username, setUsername] = useState("eve.holt@reqres.in");
-  const [password, setPassword] = useState("cityslicka");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("userToken"));
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    if (email === "admin@test.com" && password === "admin") {
+      localStorage.setItem("adminToken", Math.random().toString(36));
+      navigate("/admin");
+    } else if (
+      JSON.parse(localStorage.getItem("users") || "[]").find(
+        (user: any) => user.email === email && user.password === password
+      )
+    ) {
+      localStorage.setItem("userToken", Math.random().toString(36));
+      setToken(localStorage.getItem("userToken"));
+      setError("");
+      setLoading(false);
+    } else {
+      setError("Invalid email or password");
+      setLoading(false);
+    }
+  };
+
+  const validEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   useEffect(() => {
     if (token) {
       window.location.href = "/user";
     }
   }, [token]);
-
-  const onLogin = async () => {
-    setLoading(true);
-
-    axios
-      .post("https://reqres.in/api/login", {
-        email: username,
-        password: password,
-      })
-      .then((response: any) => {
-        console.log(response);
-        if (response.status === 200) {
-          console.log("Login Success", response.data);
-          setToken(response.data.token);
-          localStorage.setItem("token", response.data.token);
-        }
-      })
-      .catch((error: any) => {
-        console.log(error);
-        setError(error.response.data.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -74,8 +73,8 @@ export function Login() {
         justifyContent="center"
         alignItems="center"
       >
-        <Avatar bg="blue.500" />
-        <Heading color="blue.300">Welcome</Heading>
+        <Avatar bg="green.400" />
+        <Heading color="green.400">Welcome</Heading>
         <Box marginX={"40px"} minW={{ base: "90%", md: "468px" }}>
           <form>
             <Stack spacing={4} p="1rem">
@@ -85,8 +84,8 @@ export function Login() {
                   <Input
                     type="email"
                     placeholder="email address"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </InputGroup>
               </FormControl>
@@ -98,23 +97,31 @@ export function Login() {
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    onKeyUp={(e) => {
+                      if (e.key === "Enter") {
+                        handleSubmit();
+                      }
+                    }}
                   />
                   <InputRightElement width="4.5rem">
-                    <Button h="1.75rem" size="sm" onClick={handleShowClick}>
+                    <Button
+                      h="1.75rem"
+                      size="sm"
+                      onClick={() => handleShowClick()}
+                    >
                       {showPassword ? "Hide" : "Show"}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
-              <p>{error}</p>
+              {error && <p>{error}</p>}
               <Button
                 borderRadius={0}
-                type="submit"
                 variant="solid"
-                colorScheme="blue"
+                colorScheme="green"
                 width="full"
-                onClick={onLogin}
-                disabled={loading || !username || !password}
+                onClick={() => handleSubmit()}
+                disabled={loading || !validEmail(email) || !password}
               >
                 Login
               </Button>

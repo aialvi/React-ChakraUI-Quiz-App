@@ -12,45 +12,43 @@ import {
   FormControl,
   InputRightElement,
 } from "@chakra-ui/react";
-import axios from "axios";
 
 export function SignUp() {
   //function for SignUp with api request
-  const [email, setEmail] = useState("eve.holt@reqres.in");
-  const [password, setPassword] = useState("cityslicka");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
-    if (token) {
+    if (localStorage.getItem("userToken")) {
       window.location.href = "/user";
     }
-  }, [token]);
+  }, []);
+
+  const validEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const onSignUp = async () => {
     setLoading(true);
-
-    axios
-      .post("https://reqres.in/api/Signup", {
-        email: email,
-        password: password,
-      })
-      .then((response: any) => {
-        console.log(response);
-        if (response.status === 200) {
-          console.log("SignUp Success", response.data);
-          setToken(response.data.token);
-          localStorage.setItem("token", response.data.token);
-        }
-      })
-      .catch((error: any) => {
-        console.log(error);
-        setError(error.response.data.message);
-      })
-      .finally(() => {
+    if (!!localStorage.getItem("users")) {
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      if (users.find((user: any) => user.email === email)) {
+        setError("Email already exists");
         setLoading(false);
-      });
+      } else {
+        users.push({ id: users.length + 1, name, email, password });
+        localStorage.setItem("users", JSON.stringify(users));
+        localStorage.setItem("userToken", "someEncryptedIdentifiedToken");
+      }
+    } else {
+      localStorage.setItem(
+        "users",
+        JSON.stringify([{ id: 1, name, email, password }])
+      );
+    }
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -79,6 +77,17 @@ export function SignUp() {
         <Box marginX={"40px"} minW={{ base: "90%", md: "468px" }}>
           <form>
             <Stack spacing={4} p="1rem">
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none" />
+                  <Input
+                    type="text"
+                    placeholder="full name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </InputGroup>
+              </FormControl>
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" />
@@ -114,7 +123,7 @@ export function SignUp() {
                 colorScheme="blue"
                 width="full"
                 onClick={onSignUp}
-                disabled={loading || !email || !password}
+                disabled={loading || !validEmail(email) || !password || !name}
               >
                 Sign Up
               </Button>

@@ -6,9 +6,7 @@ function App() {
   return (
     <ChakraProvider>
       <div className="App">
-        <div className="Container">
-          <AllRoutes />
-        </div>
+        <AllRoutes />
       </div>
     </ChakraProvider>
   );

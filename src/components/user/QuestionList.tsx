@@ -4,11 +4,18 @@ import { allQuestions } from "../admin/adminSlice";
 import { useNavigate } from "react-router-dom";
 import styles from "./User.module.css";
 import { List, ListItem, Text } from "@chakra-ui/react";
+import { useEffect } from "react";
 
 export function QuestionList() {
   const navigate = useNavigate();
   const question = useAppSelector(allQuestions);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!localStorage.getItem("userToken")) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   return (
     <div>

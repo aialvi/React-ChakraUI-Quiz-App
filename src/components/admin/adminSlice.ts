@@ -3,6 +3,7 @@ import { RootState } from "../../app/store";
 
 export interface QuestionState {
   value: Array<any>;
+  selectedQuestionId: number;
 }
 
 export interface Question {
@@ -14,6 +15,7 @@ const initialState: QuestionState = {
   value: !!localStorage.getItem("questions")
     ? JSON.parse(localStorage.getItem("questions")!)
     : [],
+  selectedQuestionId: 0,
 };
 
 export const QuestionSlice = createSlice({
@@ -44,16 +46,21 @@ export const QuestionSlice = createSlice({
       );
       localStorage.setItem("questions", JSON.stringify(state.value));
     },
+    assignQuestionId: (state, action: PayloadAction<number>) => {
+      state.selectedQuestionId = action.payload;
+    },
   },
 });
 
-export const { addQuestion, updateQuestion, deleteQuestion } =
+export const { addQuestion, updateQuestion, deleteQuestion, assignQuestionId } =
   QuestionSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.Answer.value)`
 export const allQuestions = (state: RootState) => state.admin.value;
+export const selectedQuestionId = (state: RootState) =>
+  state.admin.selectedQuestionId;
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.

@@ -1,13 +1,21 @@
 import { Box, Button, HStack, Input } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAppDispatch } from "../../../app/hooks";
 import { updateAnswer, deleteAnswer, Answer } from "../userSlice";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
-const AnswerItem = ({ userId, questionId, id, answer }: Answer) => {
+const Answers = ({ userId, questionId, id, answer }: Answer) => {
   const [answerValue, setAnswerValue] = useState(answer);
   const [isUpdate, setIsUpdate] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("userToken")) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const handleAnswerInput = () => {
     dispatch(updateAnswer({ id, answer: answerValue, userId, questionId }));
@@ -23,7 +31,7 @@ const AnswerItem = ({ userId, questionId, id, answer }: Answer) => {
       <HStack spacing="24px">
         {!isUpdate && (
           <Box w={"fit-content"} p={2}>
-            {answer}
+            {answer.length > 50 ? answer.substring(0, 60) + "..." : answer}
           </Box>
         )}
         {isUpdate && (
@@ -67,4 +75,4 @@ const AnswerItem = ({ userId, questionId, id, answer }: Answer) => {
   );
 };
 
-export default AnswerItem;
+export default Answers;

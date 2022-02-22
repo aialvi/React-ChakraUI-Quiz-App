@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { giveAnswer, selectAnswer, selectedQuestionId } from "./userSlice";
 import { allQuestions } from "../admin/adminSlice";
 import styles from "./User.module.css";
-import { Button, Input } from "@chakra-ui/react";
+import { Button, Input, Text } from "@chakra-ui/react";
 import Answer from "./answer/Answer";
+import { useNavigate } from "react-router-dom";
 
 export function User() {
   const answer = useAppSelector(selectAnswer);
@@ -12,6 +13,13 @@ export function User() {
   const questionId = useAppSelector(selectedQuestionId);
   const dispatch = useAppDispatch();
   const [userAnswer, setUserAnswer] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("userToken")) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   return (
     <div>
@@ -55,8 +63,8 @@ export function User() {
           </div>
 
           <div className={styles.row}>
-            <span className={styles.answer}>
-              {!!answer.length && <h6>Answers:</h6>}
+            <Text fontSize={"md"}>
+              {!!answer.length && <h6>My Answers:</h6>}
 
               {answer.map((item, index) => (
                 <Answer
@@ -67,7 +75,7 @@ export function User() {
                   questionId={item.questionId}
                 />
               ))}
-            </span>
+            </Text>
           </div>
         </>
       )}
