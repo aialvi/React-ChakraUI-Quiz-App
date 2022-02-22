@@ -140,11 +140,11 @@ export function SignUp() {
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
-              <p>
-                <Text fontSize={"md"} color={"red.400"}>
-                  {error}
-                </Text>
-              </p>
+
+              <Text fontSize={"md"} color={"red.400"}>
+                {error}
+              </Text>
+
               <Button
                 borderRadius={0}
                 variant="solid"
