@@ -118,7 +118,6 @@ export function SignUp() {
               <p>{error}</p>
               <Button
                 borderRadius={0}
-                type="submit"
                 variant="solid"
                 colorScheme="blue"
                 width="full"
