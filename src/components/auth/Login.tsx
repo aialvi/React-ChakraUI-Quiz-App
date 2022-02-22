@@ -11,6 +11,7 @@ import {
   Avatar,
   FormControl,
   InputRightElement,
+  Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
@@ -18,24 +19,29 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [token, setToken] = useState(localStorage.getItem("userToken"));
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     setLoading(true);
-    if (email === "admin@test.com" && password === "admin") {
-      localStorage.setItem("adminToken", Math.random().toString(36));
+    if (
+      JSON.parse(localStorage.getItem("users") || "[]").find(
+        (user: any) => user.isAdmin === true
+      )
+    ) {
+      localStorage.setItem("isAdmin", "1");
       navigate("/admin");
     } else if (
       JSON.parse(localStorage.getItem("users") || "[]").find(
         (user: any) => user.email === email && user.password === password
       )
     ) {
-      localStorage.setItem("userToken", Math.random().toString(36));
-      setToken(localStorage.getItem("userToken"));
+      localStorage.setItem("token", Math.random().toString(36));
+      setToken(localStorage.getItem("token"));
       setError("");
       setLoading(false);
+      navigate("/user");
     } else {
       setError("Invalid email or password");
       setLoading(false);
@@ -48,9 +54,9 @@ export function Login() {
 
   useEffect(() => {
     if (token) {
-      window.location.href = "/user";
+      navigate("/user");
     }
-  }, [token]);
+  }, [token, navigate]);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -114,7 +120,11 @@ export function Login() {
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
-              {error && <p>{error}</p>}
+              <p>
+                <Text fontSize={"md"} color={"red.400"}>
+                  {error}
+                </Text>
+              </p>
               <Button
                 borderRadius={0}
                 variant="solid"

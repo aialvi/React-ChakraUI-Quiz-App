@@ -2,6 +2,9 @@ import { Box, Heading, Container, Text, Button, Stack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 export function Home() {
+  const token = localStorage.getItem("token");
+  const isAdmin = localStorage.getItem("isAdmin");
+
   return (
     <>
       <Container maxW={"3xl"}>
@@ -31,7 +34,7 @@ export function Home() {
             alignSelf={"center"}
             position={"relative"}
           >
-            <Link to={"/signup"}>
+            <Link to={token ? (isAdmin ? "/admin" : "/user") : "/signup"}>
               <Button
                 colorScheme={"green"}
                 bg={"green.400"}
@@ -41,18 +44,20 @@ export function Home() {
                   bg: "green.500",
                 }}
               >
-                Get Started
+                {token ? "Dashboard" : "Get Started"}
               </Button>
             </Link>
-            <Text fontSize={"md"} color={"gray.500"}>
-              Already have an account?{" "}
-              <Link to={"/login"}>
-                {" "}
-                <Button variant={"link"} colorScheme={"blue"} size={"sm"}>
-                  Sign in
-                </Button>
-              </Link>
-            </Text>
+            {!token && (
+              <Text fontSize={"md"} color={"gray.500"}>
+                Already have an account?{" "}
+                <Link to={"/login"}>
+                  {" "}
+                  <Button variant={"link"} colorScheme={"blue"} size={"sm"}>
+                    Sign in
+                  </Button>
+                </Link>
+              </Text>
+            )}
           </Stack>
         </Stack>
       </Container>

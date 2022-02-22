@@ -11,7 +11,9 @@ import {
   Avatar,
   FormControl,
   InputRightElement,
+  Text,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 export function SignUp() {
   //function for SignUp with api request
@@ -20,12 +22,13 @@ export function SignUp() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("userToken")) {
-      window.location.href = "/user";
+    if (localStorage.getItem("token")) {
+      navigate("/user");
     }
-  }, []);
+  }, [navigate]);
 
   const validEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -41,13 +44,28 @@ export function SignUp() {
       } else {
         users.push({ id: users.length + 1, name, email, password });
         localStorage.setItem("users", JSON.stringify(users));
-        localStorage.setItem("userToken", "someEncryptedIdentifiedToken");
+        localStorage.setItem("token", Math.random().toString(36));
+        setLoading(false);
+        navigate("/user");
       }
     } else {
       localStorage.setItem(
         "users",
-        JSON.stringify([{ id: 1, name, email, password }])
+        JSON.stringify([
+          {
+            id: 1,
+            name,
+            email,
+            password,
+            isAdmin: true,
+          },
+        ])
       );
+      localStorage.setItem("isAdmin", "1");
+      localStorage.setItem("token", Math.random().toString(36));
+
+      setLoading(false);
+      navigate("/user");
     }
   };
 
@@ -72,8 +90,8 @@ export function SignUp() {
         justifyContent="center"
         alignItems="center"
       >
-        <Avatar bg="blue.500" />
-        <Heading color="blue.300">Welcome</Heading>
+        <Avatar bg="green.400" />
+        <Heading color="green.400">Welcome</Heading>
         <Box marginX={"40px"} minW={{ base: "90%", md: "468px" }}>
           <form>
             <Stack spacing={4} p="1rem">
@@ -82,7 +100,7 @@ export function SignUp() {
                   <InputLeftElement pointerEvents="none" />
                   <Input
                     type="text"
-                    placeholder="full name"
+                    placeholder="Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
@@ -93,7 +111,7 @@ export function SignUp() {
                   <InputLeftElement pointerEvents="none" />
                   <Input
                     type="email"
-                    placeholder="email address"
+                    placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -115,11 +133,15 @@ export function SignUp() {
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
-              <p>{error}</p>
+              <p>
+                <Text fontSize={"md"} color={"red.400"}>
+                  {error}
+                </Text>
+              </p>
               <Button
                 borderRadius={0}
                 variant="solid"
-                colorScheme="blue"
+                colorScheme="green"
                 width="full"
                 onClick={onSignUp}
                 disabled={loading || !validEmail(email) || !password || !name}

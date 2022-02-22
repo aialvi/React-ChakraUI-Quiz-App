@@ -12,7 +12,7 @@ const Answers = ({ userId, questionId, id, answer }: Answer) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem("userToken")) {
+    if (!localStorage.getItem("token")) {
       navigate("/login");
     }
   }, [navigate]);

@@ -2,7 +2,7 @@ import { Box, Flex, Button, Stack, useColorModeValue } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function NavBar() {
-  const isAuthenticated = !!localStorage.getItem("userToken");
+  const isAuthenticated = !!localStorage.getItem("token");
   const navigate = useNavigate();
 
   const SignInButton = (
@@ -22,7 +22,7 @@ export default function NavBar() {
   );
   const SignOutButton = (
     <Button
-      display={{ base: "none", md: "inline-flex" }}
+      display={{ base: "inline-flex", md: "inline-flex" }}
       fontSize={"sm"}
       fontWeight={600}
       variant={"link"}
@@ -30,8 +30,8 @@ export default function NavBar() {
         color: "gray.500",
       }}
       onClick={() => {
-        localStorage.removeItem("userToken");
-        localStorage.removeItem("adminToken");
+        localStorage.removeItem("token");
+        localStorage.removeItem("isAdmin");
         navigate("/");
       }}
     >

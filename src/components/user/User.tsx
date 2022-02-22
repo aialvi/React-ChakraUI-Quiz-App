@@ -16,7 +16,7 @@ export function User() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem("userToken")) {
+    if (!localStorage.getItem("token")) {
       navigate("/login");
     }
   }, [navigate]);

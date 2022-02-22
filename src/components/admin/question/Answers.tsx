@@ -17,7 +17,7 @@ export function AnswerList() {
     : [];
 
   useEffect(() => {
-    if (!localStorage.getItem("adminToken")) {
+    if (!localStorage.getItem("isAdmin")) {
       navigate("/login");
     }
     console.log(questionId);

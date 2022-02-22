@@ -12,7 +12,7 @@ export function QuestionList() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!localStorage.getItem("userToken")) {
+    if (!localStorage.getItem("token")) {
       navigate("/login");
     }
   }, [navigate]);

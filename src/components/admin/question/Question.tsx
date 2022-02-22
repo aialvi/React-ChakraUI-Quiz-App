@@ -17,7 +17,7 @@ const QuestionItem = ({ id, question }: Question) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem("adminToken")) {
+    if (!localStorage.getItem("isAdmin")) {
       navigate("/login");
     }
   }, [navigate]);
